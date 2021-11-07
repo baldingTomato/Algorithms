@@ -4,4 +4,4 @@
 
 #### Here's a list of algorithms ###
 
-Markup : * [Heapsort](https://github.com/baldingTomato/Algorithms/tree/master/Heapsort)
+* [Heapsort](https://github.com/baldingTomato/Algorithms/tree/master/Heapsort)
