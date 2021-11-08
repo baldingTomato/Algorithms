@@ -5,3 +5,4 @@
 #### Here's a list of algorithms ###
 
 * [Heapsort](https://github.com/baldingTomato/Algorithms/tree/master/Heapsort)
+* [Quicksort](https://github.com/baldingTomato/Algorithms/tree/master/Quicksort)
