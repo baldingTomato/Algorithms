@@ -1,10 +1,28 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <windows.h>
+
+#define CONS 3
+#define SIZE 10000
 
 void swap(int *a, int *b){
     
     int temp = *a;
     *a = *b;
     *b = temp;
+
+}
+
+void bubbleSort(int arr[], int left, int right){
+    
+    for(int i = left; i < right - 1; i++){
+        for(int j = 0; j < right - i - 1; j++){
+            if(arr[j] > arr[j+1]){
+                swap(&arr[j], &arr[j+1]);
+            }
+        }
+    }
 
 }
 
@@ -27,28 +45,55 @@ int partition(int arr[], int left, int right){  //divides array into two subarra
 
 void quickSort(int arr[], int left, int right){
 
-    int cons = 3;
-    int length = sizeof(arr)/sizeof(arr[0]);
-
-    if (left + cons < right){
+    if (left < right){
         int pivot = partition(arr, left, right);
         quickSort(arr, left, pivot - 1);
         quickSort(arr, pivot + 1, right);
+    }  
+
+}
+
+void modifiedQuickSort(int arr[], int left, int right){
+
+    if (left + CONS < right){
+        int pivot = partition(arr, left, right);
+        quickSort(arr, left, pivot - 1);
+        quickSort(arr, pivot + 1, right);
+    }else if(left + CONS >= right){
+        bubbleSort(arr, left, right);
     }
+
 }
 
 int main(){
+    
+    LARGE_INTEGER frequency;        // ticks per second
+    LARGE_INTEGER t1, t2;           // ticks
+    double elapsedTime;
+    srand(time(NULL));
 
-    int arr[] = {4, 12, 2, 5, 5, 1, 7, 8, 9, 3, 6};
-    int length = sizeof(arr)/sizeof(arr[0]);
-    
-    quickSort(arr, 0, length-1);
-    
-    printf("The sorted array is: ");
-    
-    for (int i = 0; i < length; i++){
-        printf("%d ", arr[i]);
+    int arr[SIZE];
+
+    for (int i = 0; i < SIZE; i++){
+        arr[i] = rand() % 300 + 1;
+    //    printf("%d ", arr[i]);
     }
+    
+    QueryPerformanceFrequency(&frequency);  //start counting time
+    QueryPerformanceCounter(&t1);
+
+    modifiedQuickSort(arr, 0, SIZE-1);
+
+    QueryPerformanceCounter(&t2);   //finish counting time
+    
+    //printf("\nThe sorted array is: ");
+
+    //for (int i = 0; i < SIZE; i++){
+    //    printf("%d \n", arr[i]);
+    //}
+
+    elapsedTime = (t2.QuadPart - t1.QuadPart) * 1000.0 / frequency.QuadPart;
+    printf("Elapsed time: %3.7lf ms", elapsedTime);
 
     return 0;
 }
