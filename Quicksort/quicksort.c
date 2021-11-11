@@ -79,7 +79,7 @@ void randomArray(int arr[]){        //fills an array with random integers
 
 }
 
-void pessimistic(int arr[]){
+void pessimistic(int arr[]){       //fills an array with descending sequance
 
     for (int i = 0; i < SIZE; i++){
         arr[i] = SIZE - i;
