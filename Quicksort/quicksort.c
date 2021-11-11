@@ -65,6 +65,24 @@ void modifiedQuickSort(int arr[], int left, int right){
 
 }
 
+void randomArray(int arr[]){        //fills an array with random integers
+
+    for (int i = 0; i < SIZE; i++){
+        arr[i] = rand() % 300 + 1;
+    //    printf("%d ", arr[i]);
+    }
+
+}
+
+void pessimistic(int arr[]){
+
+    for (int i = 0; i < SIZE; i++){
+        arr[i] = SIZE - i;
+    //    printf("%d ", arr[i]);
+    }
+
+}
+
 int main(){
     
     LARGE_INTEGER frequency;        // ticks per second
@@ -74,10 +92,8 @@ int main(){
 
     int arr[SIZE];
 
-    for (int i = 0; i < SIZE; i++){
-        arr[i] = rand() % 300 + 1;
-    //    printf("%d ", arr[i]);
-    }
+    randomArray(arr);
+    //pessimistic(arr);
     
     QueryPerformanceFrequency(&frequency);  //start counting time
     QueryPerformanceCounter(&t1);
@@ -85,12 +101,6 @@ int main(){
     modifiedQuickSort(arr, 0, SIZE-1);
 
     QueryPerformanceCounter(&t2);   //finish counting time
-    
-    //printf("\nThe sorted array is: ");
-
-    //for (int i = 0; i < SIZE; i++){
-    //    printf("%d \n", arr[i]);
-    //}
 
     elapsedTime = (t2.QuadPart - t1.QuadPart) * 1000.0 / frequency.QuadPart;
     printf("Elapsed time: %3.7lf ms", elapsedTime);
