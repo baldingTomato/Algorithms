@@ -1,3 +1,8 @@
+/*
+This program is for testing how fast quicksort algorithm works depending on the amount of data and its arrangement in the array.
+I consider two cases, random data and descending sequence. Time is measured in milliseconds.
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
