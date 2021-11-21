@@ -6,3 +6,4 @@
 
 * [Heapsort](https://github.com/baldingTomato/Algorithms/tree/master/Heapsort)
 * [Quicksort](https://github.com/baldingTomato/Algorithms/tree/master/Quicksort)
+* [Radix Sort](https://github.com/baldingTomato/Algorithms/tree/master/Radix_Sort)
