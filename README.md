@@ -1,7 +1,8 @@
 # Algorithms and Data Structures #
 
-## Repo for algorithms I'm currently studying ##
+## Repo for programs I'm currently writing for my uni studies ##
 
-#### Here's a list of programs ###
+#### Here's a list of algorithms ###
 
-
+* [Heapsort](https://github.com/baldingTomato/Algorithms/tree/master/Heapsort)
+* [Quicksort](https://github.com/baldingTomato/Algorithms/tree/master/Quicksort)
