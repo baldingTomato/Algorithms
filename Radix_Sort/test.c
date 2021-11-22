@@ -4,9 +4,23 @@
 
 int main(){
 
-    char *test = "tomek";
+    char **test;
+    *test = malloc(4 * sizeof(char*));
 
-    printf("%s, %c, %d", test, *(test+2), *(test+2));
+    for(int i = 0; i < 3; i++){
+        test[i] = malloc(4 * sizeof(char));
+        strcpy(test[i], "uno");
+    }
+
+    char **test2;
+    *test2 = malloc(4 * sizeof(char*));
+
+    for(int i = 0; i < 3; i++){
+        test2[i] = malloc(4 * sizeof(char));
+        strcpy(test2[i], "dos");
+    }
+
+    printf("%s", test2[0]);
 
     return 0;
 }
