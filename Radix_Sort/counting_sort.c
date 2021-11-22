@@ -19,15 +19,17 @@ int getMaxLength(int arr[]){
 
 void countSort(char** words, int length[], int position){
 
-    char *temp;
-    int occurrences[36] = {0};
+    char **temp;
+    *temp = malloc(NO_ELEMENTS * sizeof(char*));
+    int occurrences[123] = {0};
 
     for (int j = 0; j < NO_ELEMENTS; j++){   
         //ccurrences[position < strlen(words[j]) ? (int)(unsigned char)words[j][position] + 1 : 0]++;
-        
+        occurrences[*(words[j]+length[j]-1)]++;
+        temp[j] = malloc(length[j] * sizeof(char));
     }
 
-     for(int f = 1; f < 36; f++){
+     for(int f = 1; f < 123; f++){
         occurrences[f] += occurrences[f - 1];
     }
 
