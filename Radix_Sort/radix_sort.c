@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define NO_ELEMENTS 9
+#define NO_ELEMENTS 20000
 
 
 int getMaxLength(int *arr){
@@ -24,6 +24,8 @@ int char_to_index(char character){
 
 	if(character >= 'a') {
 		index = character - 'a';
+	}else if(character <= '9'){
+		index = character - 20;
 	}else{
 		index = character - 'A';
 	}
@@ -32,9 +34,9 @@ int char_to_index(char character){
 	return index + 1;
 }
 
-char** counting_sort(char **words, int *length, int position){
+char** counting_sort(char **words, int *length, int position, int *popularity){
 
-	int no_characters = 27;	// I do not need to count big letters differently
+	int no_characters = 37;	// I do not need to count big letters differently
 
 	int *occurrences = calloc(no_characters, sizeof(int));
 
@@ -55,8 +57,8 @@ char** counting_sort(char **words, int *length, int position){
 	}
 
 	// compute first positions in output array for each bucket
-	int sum = 0;
-	int curr_count;
+	long sum = 0;
+	long curr_count;
 	for(i = 0; i < no_characters; i++){
 		curr_count = occurrences[i];
 		occurrences[i] = sum;
@@ -66,6 +68,7 @@ char** counting_sort(char **words, int *length, int position){
 	//	arrays for swaping words in original array
 	char **temp = malloc(NO_ELEMENTS * sizeof(char*));
     int *temp_lengths = malloc(NO_ELEMENTS * sizeof(int));
+	int *temp_popularity = malloc(NO_ELEMENTS * sizeof(int));
 
 	//	computing element positions
 	for(i = 0; i < NO_ELEMENTS; i++){
@@ -73,12 +76,14 @@ char** counting_sort(char **words, int *length, int position){
 		if(position >= length[i]){
             temp_lengths[occurrences[0]] = length[i];
 			temp[occurrences[0]] = words[i];
+			temp_popularity[occurrences[0]] = popularity[i];
 			occurrences[0]++;
 		}else{
 			index = char_to_index(words[i][position]);
 			int temp_index = occurrences[index];
 			temp[temp_index] = words[i];
 			temp_lengths[temp_index] = length[i];
+			temp_popularity[temp_index] = popularity[i];
 			occurrences[index]++;
 		}
 
@@ -90,6 +95,7 @@ char** counting_sort(char **words, int *length, int position){
 	for(i = 0; i < NO_ELEMENTS; i++){
 		words[i] = temp[i];
 		length[i] = temp_lengths[i];
+		popularity[i] = temp_popularity[i];
 	}
 
 	free(temp);
@@ -98,13 +104,13 @@ char** counting_sort(char **words, int *length, int position){
 	return words;
 }
 
-void radixSort(char **words, int *length){
+void radixSort(char **words, int *length, int *popularity){
 
 	int max = getMaxLength(length);
 
 	// sorting from least significant character
 	for(int position = max - 1; position >= 0; position--){
-		counting_sort(words, length, position);
+		counting_sort(words, length, position, popularity);
 	}
 
 	
@@ -120,13 +126,14 @@ void print(char **words, int popularity[]){
 
 int main(){
 
-    FILE *fr;
-    int popularity[NO_ELEMENTS];
+    FILE *fr, *fw;
+    int *popularity = malloc(NO_ELEMENTS * sizeof(int));
 
     int *length = malloc(NO_ELEMENTS * sizeof(int));
     char *words[NO_ELEMENTS];
 
     fr = fopen("test.txt","r");
+	fw = fopen("sorted_test.txt","w");
     
     if (fr == NULL){
        printf("Error!");
@@ -135,7 +142,7 @@ int main(){
 
     for(int i = 0; i < NO_ELEMENTS; i++){
 
-        char word[20];
+        char word[30];
 
         fscanf(fr, "%d %s\n", &popularity[i], &word);
         //printf("%d, %s\n", popularity[i], word);
@@ -146,13 +153,18 @@ int main(){
         
     }
     
-    radixSort(words, length);
+    radixSort(words, length, popularity);
 
-    print(words, popularity);
+    //print(words, popularity);
+
+	for(int i = 0; i < NO_ELEMENTS; i++){
+		fprintf(fw,"%d %s\n",popularity[i], words[i]);
+	}
 
 
     free(length);
 
     fclose(fr);
+	fclose(fw);
     return 0;
 }
