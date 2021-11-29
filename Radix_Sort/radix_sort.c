@@ -34,17 +34,17 @@ int char_to_index(char character){
 
 char** counting_sort(char **words, int *length, int position){
 
-	int no_characters = 27;
+	int no_characters = 27;	// I do not need to count big letters differently
 
 	int *occurrences = calloc(no_characters, sizeof(int));
 
-	// counting
+	// for counting
     long i = 0;
 	char curr_char;
 	int index;
 
 	for (i = 0; i < NO_ELEMENTS; i++){
-		// check if word has character at given position (may be shorter)
+		// check if word has character at given position (may be shorter), if it doesn't increment '0' index
 		if(position < length[i]){
 			curr_char = words[i][position];
 			index = char_to_index(curr_char);
@@ -63,10 +63,11 @@ char** counting_sort(char **words, int *length, int position){
 		sum += curr_count;
 	}
 
+	//	arrays for swaping words in original array
 	char **temp = malloc(NO_ELEMENTS * sizeof(char*));
     int *temp_lengths = malloc(NO_ELEMENTS * sizeof(int));
 
-	// computing element positions
+	//	computing element positions
 	for(i = 0; i < NO_ELEMENTS; i++){
 
 		if(position >= length[i]){
