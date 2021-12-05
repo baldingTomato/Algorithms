@@ -1,3 +1,8 @@
+/*
+This program uses radix sort for sorting alphabetically Polish surnames and their popularity in text files. It stores strings with different length
+in an array.
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

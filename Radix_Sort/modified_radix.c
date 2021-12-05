@@ -1,3 +1,9 @@
+/*
+This program uses radix sort for sorting alphabetically Polish surnames and their popularity in text files. It stores strings with different length
+in an array.
+I am also measuring elapsed time of an algorithm. For comparison I used quicksort to see how fast radix sort is.
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -143,7 +149,7 @@ char** counting_sort(char **words, int *length, int position, int *popularity){
 	return words;
 }
 
-void radixSort(char **words, int *length, int *popularity){
+void radixSort(char **words, int *length, int *popularity){		//sorts strings starting from last character
 
 	int max = getMaxLength(length);
 
@@ -155,14 +161,6 @@ void radixSort(char **words, int *length, int *popularity){
 	
 }
 
-void print(char **words, int popularity[]){
-
-	for (long i = 0; i < NO_ELEMENTS; i++){
-		printf("\n%d %s", popularity[i], words[i]);
-	}
-    
-}
-
 int main(){
 
 	LARGE_INTEGER frequency;        // ticks per second
@@ -171,7 +169,7 @@ int main(){
     srand(time(NULL));
 
     FILE *fr, *fw;
-    int *popularity = malloc(NO_ELEMENTS * sizeof(int));
+    int *popularity = malloc(NO_ELEMENTS * sizeof(int));	//array for popularity of surnames
 
     int *length = malloc(NO_ELEMENTS * sizeof(int));
     char *words[NO_ELEMENTS];
