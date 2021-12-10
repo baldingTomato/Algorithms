@@ -1,5 +1,5 @@
 /*
-This program shows some of the simple functions you can use with linked lists. I put in it functions for ading and deleting nodes, merging lists,
+This program shows some of the simple functions you can use with doubly circular linked lists with sentinels. I put in it functions for ading and deleting nodes, merging lists,
 copying lists without repeated strings.
 */
 
