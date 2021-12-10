@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 struct node {
 
@@ -116,62 +117,115 @@ void *delete_list(List *head) {
 	free(head);
 }
 
-
 List *copyWithoutRepetition(List *list){
 
     List *copy = createSentinel();
     list = list->next;
+    int checker = 0;
+
+    add_node(list->string, copy);
+
+    list = list->next;
+    copy = copy->next;
+    List *copy_head = copy;
 
     while(list->string != NULL){
 
-        add_node(list->string, copy);
-
-    }
-
-    for(copy->next; copy->next != NULL; copy = copy->next){
-
+        char *word;
+        strcpy(word, list->string);
+        
         while(copy->string != NULL){
-
-            //probably wrong approach
-
+            if(strcmp(word, copy->string) == 0){
+                checker = 1;
+            }
+            copy = copy->next;
         }
+        copy = copy_head;
+        
+        if(checker == 0){
+            add_node(list->string, copy);
+        }
+        checker = 0;
+        list = list->next;
 
     }
 
+    return copy->prev;
+
+}
+
+List *merge_lists(List *list1, List *list2){
+
+    List *sentinel1 = list1;
+    while(list1->next->string != NULL){
+        list1 = list1->next;
+    }
+
+    list1->next = list2->next;
+    list2->next->prev = list1;
+
+    while(list2->next->string != NULL){
+        list2 = list2->next;
+    }
+
+    list2->next = sentinel1;
+    sentinel1->prev = list2;
+
+
+    return sentinel1;
 }
 
 
 int main(){
 
     List *sentinel_1 = createSentinel();
+    List *sentinel_2 = createSentinel();
 
     add_node("tomek", sentinel_1);
     add_node("piotr", sentinel_1);
     add_node("filip", sentinel_1);
+    add_node("filip", sentinel_1);
     add_node("radek", sentinel_1);
 
-    print_list(sentinel_1);
+    add_node("alicja", sentinel_2);
+    add_node("weronika", sentinel_2);
+    add_node("alberta", sentinel_2);
+    add_node("kasia", sentinel_2);
+    add_node("wiktoria", sentinel_2);
 
-    search("radek", sentinel_1);
 
-    delete_node("filip", sentinel_1);
+    //print_list(sentinel_1);
 
-    print_list(sentinel_1);
+    //search("radek", sentinel_1);
 
-    search("radek", sentinel_1);
+    //delete_node("filip", sentinel_1);
+
+    //print_list(sentinel_1);
+
+    //search("radek", sentinel_1);
     
-    delete_list(sentinel_1);
+    //delete_list(sentinel_1);
 
-    List *sentinel_2 = createSentinel();
+    //List *sentinel_2 = createSentinel();
 
-    add_node("rafal", sentinel_2);
-    add_node("wojtek", sentinel_2);
+    //add_node("rafal", sentinel_2);
+    //add_node("wojtek", sentinel_2);
 
+    //print_list(sentinel_2);
+
+    //search("wojtek", sentinel_2);
+
+    printf("\n\n");
+
+    //List *sentinel_2 = copyWithoutRepetition(sentinel_1);
+
+    print_list(sentinel_1);
+    printf("\n\n\n");
     print_list(sentinel_2);
 
-    search("wojtek", sentinel_2);
-
-
+    List *sentinel_3 = merge_lists(sentinel_1, sentinel_2);
+    printf("\n\n\n");
+    print_list(sentinel_3);
 
 
     return 0;
