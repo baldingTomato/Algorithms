@@ -1,3 +1,8 @@
+/*
+This program shows some of the simple functions you can use with linked lists. I put in it functions for ading and deleting nodes, merging lists,
+copying lists without repeated strings.
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -12,7 +17,7 @@ struct node {
 
 typedef struct node List;
 
-List *createSentinel(){
+List *createSentinel(){     //returns node that should be the beginning of a linked list
 
 	List *sentinel = (List*)malloc(sizeof(List));
 	
@@ -31,13 +36,13 @@ List *add_node(char *word, List *sentinel){
 	
 	item->string = word;
 
-    if(sentinel->next == sentinel){
+    if(sentinel->next == sentinel){     //if linked list has no nodes besides sentinel
         item->next = sentinel;
 	    item->prev = sentinel;
 
         sentinel->next = item;
         sentinel->prev = item;
-    }else{
+    }else{                              //if there are other nodes
         item->next = sentinel->next;
         item->prev = sentinel;
 
@@ -103,12 +108,12 @@ void *delete_node(char *word, List *sentinel){
 
 }
 
-void *delete_list(List *head) {
+void *delete_list(List *head){
 	
     head = head->next;
     List *next;
 	
-	while(head->string != NULL) {
+	while(head->string != NULL){
 		next = head->next;
 		free(head);
 		head = next;
