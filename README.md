@@ -8,3 +8,4 @@
 * [Quicksort](https://github.com/baldingTomato/Algorithms/tree/master/Quicksort)
 * [Radix Sort](https://github.com/baldingTomato/Algorithms/tree/master/Radix_Sort)
 * [Linked Lists](https://github.com/baldingTomato/Algorithms/tree/master/Linked_Lists)
+* [Hash Tables](https://github.com/baldingTomato/Algorithms/tree/master/Hash_Tables)
