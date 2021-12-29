@@ -47,6 +47,57 @@ hashTable *createHashTable(){
         return hashtable;
 }
 
+//Inserts given word and its 'hashed key'
+hashList *insertHash(int key, char *string){
+        
+        hashList *newpair;
+
+        if((newpair = malloc(sizeof(hashList))) == NULL){
+                return NULL;
+        }
+
+        newpair->key = key;
+
+        if((newpair->word = strdup(string)) == NULL){
+                return NULL;
+        }
+
+        newpair->hash_list = NULL;
+
+        return newpair;
+}
+
+//Insert a key-string pair into a hash table 
+void setHashTable(hashTable *hashtable, char *string){
+
+        int slot = 0;
+        hashList *newpair = NULL;
+        hashList *hash_list = NULL;
+        hashList *prev = NULL;
+
+        slot = hash(string);
+
+        hash_list = hashtable->table[slot];
+
+        while(hash_list != NULL && hash_list->word != NULL && strcmp(string, hash_list->word) != 0){
+                prev = hash_list;
+                hash_list = hash_list->hash_list;
+        }
+
+        newpair = insertHash(slot, string);
+
+        //Start of the linked list in this slot.
+        if(hash_list == hashtable->table[slot]){
+                newpair->hash_list = hash_list;
+                hashtable->table[slot] = newpair;
+        
+        //End of the linked list in this slot.
+        }else if(hash_list == NULL){
+                hashtable->collisions[slot]++;
+                prev->hash_list = newpair;
+        }
+}
+
 int main(){
 
     hashTable *hashtable = createHashTable();
