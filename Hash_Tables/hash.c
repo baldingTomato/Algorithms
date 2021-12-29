@@ -1,3 +1,8 @@
+/*
+This is a simple hash table implementation for my uni assignment. In this hash table I can store words, their hashed values (keys) and
+collisions are handled with single linked lists. Size of hash table is defined by big prime number.
+In the future I may use this for testing how much collisions occure with this hashing function.
+*/
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
