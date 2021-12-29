@@ -47,6 +47,23 @@ hashTable *createHashTable(){
         return hashtable;
 }
 
+//Hash a string for a particular hash table
+int hash(char *word){
+
+        int len = strlen(word);
+        int result = 0, i;
+
+        for(i = 0; i < len-1; i = i+2){
+            result ^= ((256*word[i]) + word[i+1]);
+        }
+
+        if(word[i] != 0){
+                result ^= (256*word[i]);
+        }
+
+        return result%LIST_LENGTH;
+}
+
 //Inserts given word and its 'hashed key'
 hashList *insertHash(int key, char *string){
         
