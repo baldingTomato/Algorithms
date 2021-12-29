@@ -115,9 +115,52 @@ void setHashTable(hashTable *hashtable, char *string){
         }
 }
 
+// Retrieve a key-string pair from a hash table.
+char *findWord(hashTable *hashtable, char *string){
+
+        int slot = 0;
+        int collisions = 0;
+        hashList *pair;
+
+        slot = hash(string);
+
+        // Step through the slot, looking for our word.
+        pair = hashtable->table[slot];
+        while( pair != NULL && pair->word != NULL && strcmp(string, pair->word) != 0) {
+                pair = pair->hash_list;
+        }
+
+        // Did we actually find anything?
+        if(pair == NULL || pair->word == NULL || strcmp(string, pair->word) != 0){
+                printf("\"%s\" - ", string);
+                return "there is no such word in hashtable!";
+
+        } else {
+                printf("Key: %d, Collisions: %d ", pair->key, hashtable->collisions[slot]);
+                return pair->word;
+        }
+
+}
+
 int main(){
 
     hashTable *hashtable = createHashTable();
-  
-  return 0;
+
+    setHashTable(hashtable, "pop");
+    setHashTable(hashtable, "pinky");
+    setHashTable(hashtable, "jurny");
+    setHashTable(hashtable, "blinky");
+    setHashTable(hashtable, "Finick");
+    setHashTable(hashtable, "Tomek");
+    setHashTable(hashtable, "brach");
+
+    printf( "%s\n", findWord(hashtable, "pop"));
+    printf( "%s\n", findWord(hashtable, "pinky"));
+    printf( "%s\n", findWord(hashtable, "blinky"));
+    printf( "%s\n", findWord(hashtable, "Tomek"));
+    printf( "%s\n", findWord(hashtable, "brachu"));
+    printf( "%s\n", findWord(hashtable, "Finick"));
+
+    free(hashtable);
+
 }
