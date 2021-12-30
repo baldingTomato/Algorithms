@@ -147,6 +147,35 @@ char *findWord(hashTable *hashtable, char *string){
 
 }
 
+void countCollisions(hashTable *hashtable){
+
+    int max = 0;
+    int mean = 0;
+    int zeros = 0;
+    int nonZeroCounter = 0;
+
+    for(int i = 0; i < LIST_LENGTH; i++){
+
+        if(hashtable->collisions[i] == 0){
+            zeros++;
+            continue;
+        }
+
+        if(hashtable->collisions[i] > max){
+            max = hashtable->collisions[i];
+        }
+
+        mean += hashtable->collisions[i];
+        nonZeroCounter++;
+
+    }
+
+    mean /= nonZeroCounter;
+
+    printf("\nNumber of zeros: %d\nMean value of collisions: %d\nMaximum number of collisions: %d\n", zeros, mean, max);
+
+}
+
 int main(){
 
     hashTable *hashtable = createHashTable();
