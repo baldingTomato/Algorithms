@@ -7,13 +7,13 @@ In the future I may use this for testing how much collisions occure with this ha
 #include <stdio.h>
 #include <string.h>
 
-#define LIST_LENGTH 14011
+#define LIST_LENGTH 14029
 
 struct hashList {
 
-        int key;
-        char *word;
-        struct hashList *hash_list;
+    int key;
+    char *word;
+    struct hashList *hash_list;
 
 };
 
@@ -21,8 +21,8 @@ typedef struct hashList hashList;
 
 struct hashTable {
 
-        struct hashList **table;
-        int *collisions;
+    struct hashList **table;
+    int *collisions;
 
 };
 
@@ -31,119 +31,121 @@ typedef struct hashTable hashTable;
 //Create a new hashtable
 hashTable *createHashTable(){
 
-        hashTable *hashtable = NULL;
+    hashTable *hashtable = NULL;
 
-        if((hashtable = malloc(sizeof(hashTable) * 1)) == NULL ){
-                return NULL;
-        }
+    if((hashtable = malloc(sizeof(hashTable) * 1)) == NULL ){
+            return NULL;
+    }
 
-        if((hashtable->table = malloc(sizeof(hashList*) * LIST_LENGTH)) == NULL){
-                return NULL;
-        }
+    if((hashtable->table = malloc(sizeof(hashList*) * LIST_LENGTH)) == NULL){
+            return NULL;
+    }
 
-        if((hashtable->collisions = (int*) calloc(LIST_LENGTH, sizeof(int))) == NULL){
-                return NULL;
-        }
+    if((hashtable->collisions = (int*) calloc(LIST_LENGTH, sizeof(int))) == NULL){
+            return NULL;
+    }
 
-        for(int i = 0; i < LIST_LENGTH; i++){
-                hashtable->table[i] == NULL;
-        }
+    for(int i = 0; i < LIST_LENGTH; i++){
+            hashtable->table[i] == NULL;
+    }
 
-        return hashtable;
+    return hashtable;
 }
 
 //Hash a string for a particular hash table
 int hash(char *word){
 
-        int len = strlen(word);
-        int result = 0, i;
+    int len = strlen(word);
+    int result = 0, i;
 
-        for(i = 0; i < len-1; i = i+2){
-            result ^= ((256*word[i]) + word[i+1]);
-        }
+    for(i = 0; i < len-1; i = i+2){
+        result ^= ((256*word[i]) + word[i+1]);
+    }
 
-        if(word[i] != 0){
-                result ^= (256*word[i]);
-        }
+    if(word[i] != 0){
+        result ^= (256*word[i]);
+    }
 
-        return result%LIST_LENGTH;
+    return result%LIST_LENGTH;
 }
 
 //Inserts given word and its 'hashed key'
 hashList *insertHash(int key, char *string){
         
-        hashList *newpair;
+    hashList *newpair;
 
-        if((newpair = malloc(sizeof(hashList))) == NULL){
-                return NULL;
-        }
+    if((newpair = malloc(sizeof(hashList))) == NULL){
+        return NULL;
+    }
 
-        newpair->key = key;
+    newpair->key = key;
 
-        if((newpair->word = strdup(string)) == NULL){
-                return NULL;
-        }
+    if((newpair->word = strdup(string)) == NULL){
+        return NULL;
+    }
 
-        newpair->hash_list = NULL;
+    newpair->hash_list = NULL;
 
-        return newpair;
+    return newpair;
 }
 
 //Insert a key-string pair into a hash table 
 void setHashTable(hashTable *hashtable, char *string){
 
-        int slot = 0;
-        hashList *newpair = NULL;
-        hashList *hash_list = NULL;
-        hashList *prev = NULL;
+    int slot = 0;
+    hashList *newpair = NULL;
+    hashList *hash_list = NULL;
+    hashList *prev = NULL;
+       
 
-        slot = hash(string);
+    slot = hash(string);
 
-        hash_list = hashtable->table[slot];
+    hash_list = hashtable->table[slot];
 
-        while(hash_list != NULL && hash_list->word != NULL && strcmp(string, hash_list->word) != 0){
-                prev = hash_list;
-                hash_list = hash_list->hash_list;
-        }
+    while(hash_list != NULL && hash_list->word != NULL && strcmp(string, hash_list->word) != 0){
+        prev = hash_list;
+        hash_list = hash_list->hash_list;
+    }
 
-        newpair = insertHash(slot, string);
+    newpair = insertHash(slot, string);
 
-        //Start of the linked list in this slot.
-        if(hash_list == hashtable->table[slot]){
-                newpair->hash_list = hash_list;
-                hashtable->table[slot] = newpair;
+    //Start of the linked list in this slot.
+    if(hash_list == hashtable->table[slot]){
+        newpair->hash_list = hash_list;
+        hashtable->table[slot] = newpair;
         
-        //End of the linked list in this slot.
-        }else if(hash_list == NULL){
-                hashtable->collisions[slot]++;
-                prev->hash_list = newpair;
-        }
+	//End of the linked list in this slot.
+    }else if(hash_list == NULL){
+            hashtable->collisions[slot]++;
+            prev->hash_list = newpair;
+    }
+        
 }
 
 // Retrieve a key-string pair from a hash table.
 char *findWord(hashTable *hashtable, char *string){
 
-        int slot = 0;
-        int collisions = 0;
-        hashList *pair;
+    int slot = 0;
+    int collisions = 0;
+    hashList *pair;
 
-        slot = hash(string);
+    slot = hash(string);
 
-        // Step through the slot, looking for our word.
-        pair = hashtable->table[slot];
-        while( pair != NULL && pair->word != NULL && strcmp(string, pair->word) != 0) {
-                pair = pair->hash_list;
-        }
+    // Step through the slot, looking for our word.
+    pair = hashtable->table[slot];
+    while( pair != NULL && pair->word != NULL && strcmp(string, pair->word) != 0) {
+        pair = pair->hash_list;
+    }
 
-        // Did we actually find anything?
-        if(pair == NULL || pair->word == NULL || strcmp(string, pair->word) != 0){
-                printf("\"%s\" - ", string);
-                return "there is no such word in hashtable!";
+    // Did we actually find anything?
+    if(pair == NULL || pair->word == NULL || strcmp(string, pair->word) != 0){
+        printf("\"%s\" - ", string);
+        return "there is no such word in hashtable!";
 
-        } else {
-                printf("Key: %d, Collisions: %d ", pair->key, hashtable->collisions[slot]);
-                return pair->word;
-        }
+    }else{
+        printf("Key: %d, Collisions: %d ", pair->key, hashtable->collisions[slot]);
+        	return pair->word;
+    }
 
 }
 
@@ -178,10 +180,28 @@ void countCollisions(hashTable *hashtable){
 
 int main(){
 
+    FILE *fr;
+    fr = fopen("words.txt","r");
+
+    if(fr == NULL){
+        printf("Error!");
+        return(1);
+    }
+
     hashTable *hashtable = createHashTable();
 
+    for(int i = 0; i < 3744; i++){
+        char word[30];
+        fscanf(fr, "%s\n", &word);
+        setHashTable(hashtable, word);
+        printf( "%s\n", findWord(hashtable, word));
+    }
+
+    /*
     setHashTable(hashtable, "pop");
+    setHashTable(hashtable, "inky");
     setHashTable(hashtable, "pinky");
+    setHashTable(hashtable, "dinky");
     setHashTable(hashtable, "jurny");
     setHashTable(hashtable, "blinky");
     setHashTable(hashtable, "Finick");
@@ -190,11 +210,16 @@ int main(){
 
     printf( "%s\n", findWord(hashtable, "pop"));
     printf( "%s\n", findWord(hashtable, "pinky"));
+    printf( "%s\n", findWord(hashtable, "inky"));
     printf( "%s\n", findWord(hashtable, "blinky"));
     printf( "%s\n", findWord(hashtable, "Tomek"));
     printf( "%s\n", findWord(hashtable, "brachu"));
     printf( "%s\n", findWord(hashtable, "Finick"));
+    */
+
+    countCollisions(hashtable);
 
     free(hashtable);
+    fclose(fr);
 
 }
