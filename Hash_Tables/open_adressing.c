@@ -7,7 +7,6 @@ It reads integers and strings from txt file, inserts them into hashtable and cou
 #include <stdlib.h>
 
 #define TABLE_LENGTH 6000
-#define DEL -1  //node of array in which was stored some value but now it's empty
 
 struct hashNode {
 
