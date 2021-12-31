@@ -43,6 +43,61 @@ hashTable *createTable(){
     return newTable;
 }
 
+int hash(const char* string, int attempt){
+
+    int len = strlen(string);
+    int result = 0, i;
+
+    for(i = 0; i < len-1; i = i+2){
+        result ^= ((256*string[i]) + string[i+1]);
+    }
+
+    if(string[i] != 0){
+        result ^= (256*string[i]);
+    }
+
+    return ((result % TABLE_LENGTH) + attempt) % TABLE_LENGTH;
+
+}
+
+hashNode *setNode(int key, const char *string){
+        
+    hashNode *newNode;
+
+    if((newNode = malloc(sizeof(hashNode) * 1)) == NULL){
+        return NULL;
+    }
+
+    newNode->amount = key;
+
+    if((newNode->word = strdup(string)) == NULL){
+        return NULL;
+    }
+
+    return newNode;
+}
+
+void hashInsert(hashTable* hashtable, int attempts[], int count, const char* string, int popularity){
+
+    for(int i = 0; i < TABLE_LENGTH; i++){
+
+        int j = hash(string, i);
+        printf("%d\n", j);
+        attempts[count]++;
+
+        if(hashtable->table[j] == NULL){
+
+            hashtable->table[j] = setNode(popularity, string);
+
+            printf("Word \"%s\" was inserted in node number %d\n", hashtable->table[j]->word, j);
+            return;
+        }
+
+    }
+
+    printf("There is no place for string \"%s\"", string);
+}
+
 int main(){
 
     hashTable *hashtable = createTable();
