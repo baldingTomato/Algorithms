@@ -101,6 +101,40 @@ void hashInsert(hashTable* hashtable, int attempts[], int count, const char* str
 int main(){
 
     hashTable *hashtable = createTable();
+    int attempts[TABLE_LENGTH] = {0};
+
+    FILE *fr;
+    fr = fopen("surnames.txt","r");
+
+    if(fr == NULL){
+        printf("Error!");
+        return(1);
+    }
+
+    //test for small amount of data
+    /*for(int i = 0; i < 20; i++){
+        char word[30];
+        int popularity;
+        fscanf(fr, "%d %s\n", &popularity, &word);
+        hashInsert(hashtable, attempts, word, popularity);
+    }*/
+
+    for(int i = 0; i < 5400; i++){
+        char word[30];
+        int popularity;
+        fscanf(fr, "%d %s\n", &popularity, &word);
+        hashInsert(hashtable, attempts, i, word, popularity);
+    }
+
+    int mean = 0;
+
+    for(int i = 0; i < 5400; i++){
+
+        mean += attempts[i]; 
+
+    }
+
+    printf("\nMean number of attempts to insert element into a node: %d", mean/5400);
 
     //hashInsert(hashtable, attempts, "Tomek", 88);
     //hashInsert(hashtable, attempts, "Tomek", 88);
@@ -110,6 +144,12 @@ int main(){
     //hashInsert(hashtable, attempts, "Roman", 48);
 
     free(hashtable);
-  
+    fclose(fr);
+
     return 0;
 }
+
+//Linear probing:
+//Table size: 6000; filled in 50% : mean = 5
+//                  filled in 80% : mean = 22
+//                  filled in 90% : mean = 60
