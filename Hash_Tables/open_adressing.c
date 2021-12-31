@@ -1,3 +1,7 @@
+/*
+This program implements hash tables with open adressing. At the moment it has only linear probing.
+It reads integers and strings from txt file, inserts them into hashtable and counts mean number of attempts to insert data.
+*/
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
