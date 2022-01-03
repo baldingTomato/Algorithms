@@ -7,6 +7,8 @@ It reads integers and strings from txt file, inserts them into hashtable and cou
 #include <stdlib.h>
 
 #define TABLE_LENGTH 6000
+#define PERCENTAGE 4800
+#define DEL -1  //node of array in which was stored some value but now it's empty
 
 struct hashNode {
 
@@ -46,7 +48,8 @@ hashTable *createTable(){
     return newTable;
 }
 
-int hash(const char* string, int attempt){
+//for linear probing
+int linear_hash(const char* string, int attempt){
 
     int len = strlen(string);
     int result = 0, i;
@@ -60,6 +63,26 @@ int hash(const char* string, int attempt){
     }
 
     return ((result % TABLE_LENGTH) + attempt) % TABLE_LENGTH;
+
+}
+
+//for square probing
+int square_hash(const char* string, int attempt){
+
+    int len = strlen(string);
+    int result = 0, i;
+    int constant1 = 2;
+    int constant2 = 3;
+
+    for(i = 0; i < len-1; i = i+2){
+        result ^= ((256*string[i]) + string[i+1]);
+    }
+
+    if(string[i] != 0){
+        result ^= (256*string[i]);
+    }
+
+    return ((result % TABLE_LENGTH) + (constant1*attempt) + (constant2*attempt)) % TABLE_LENGTH;
 
 }
 
@@ -84,7 +107,7 @@ void hashInsert(hashTable* hashtable, int attempts[], int count, const char* str
 
     for(int i = 0; i < TABLE_LENGTH; i++){
 
-        int j = hash(string, i);
+        int j = linear_hash(string, i);
         printf("%d\n", j);
         attempts[count]++;
 
@@ -100,6 +123,26 @@ void hashInsert(hashTable* hashtable, int attempts[], int count, const char* str
 
     printf("There is no place for string \"%s\"", string);
 }
+
+void emptyNode(hashTable* hashtable, const char* string){
+
+    for(int i = 0, j = 0; i < TABLE_LENGTH; i++){
+   
+        if(strcmp(hashtable->table[i]->word, string) == 0){
+
+            hashtable->table[i]->amount = DEL;
+            j++;
+
+        }
+
+        if(j == PERCENTAGE/2){
+            return;
+        }
+
+    }
+
+}
+
 
 int main(){
 
@@ -122,7 +165,7 @@ int main(){
         hashInsert(hashtable, attempts, word, popularity);
     }*/
 
-    for(int i = 0; i < 5400; i++){
+    for(int i = 0; i < PERCENTAGE; i++){
         char word[30];
         int popularity;
         fscanf(fr, "%d %s\n", &popularity, &word);
@@ -131,13 +174,13 @@ int main(){
 
     int mean = 0;
 
-    for(int i = 0; i < 5400; i++){
+    for(int i = 0; i < PERCENTAGE; i++){
 
         mean += attempts[i]; 
 
     }
 
-    printf("\nMean number of attempts to insert element into a node: %d", mean/5400);
+    printf("\nMean number of attempts to insert element into a node: %d", mean/PERCENTAGE);
 
     //hashInsert(hashtable, attempts, "Tomek", 88);
     //hashInsert(hashtable, attempts, "Tomek", 88);
