@@ -139,17 +139,24 @@ void deleteNode(Node *parent, int val){
         }else if(val == parent->value){
             
             if(parent->left_child == NULL && parent->right_child == NULL){
+                
                 parent = NULL;
                 deleted = true;
+                
             }else if(parent->left_child != NULL && parent->right_child == NULL){
+                
                 parent->value = parent->left_child->value;
                 parent->left_child = NULL;
                 deleted = true;
+                
             }else if(parent->left_child == NULL && parent->right_child != NULL){
+                
                 parent->value = parent->right_child->value;
                 parent->right_child = NULL;
                 deleted = true;
+                
             }else if(parent->left_child != NULL && parent->right_child != NULL){
+                
                 Node *successor = createNode(0);
                 successor = minValue(parent->right_child);
                 printf("%d", successor->value);
@@ -157,6 +164,7 @@ void deleteNode(Node *parent, int val){
                 deleteNode(parent->right_child, successor->value);
                 successor = NULL;
                 deleted = true;
+                
             }
 
         }
