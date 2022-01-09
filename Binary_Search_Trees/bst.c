@@ -96,83 +96,60 @@ void searchNode(Node *parent, int val){
 
 }
 
-Node *minValue(Node *parent){
+Node *minValueNode(Node *parent){
+  
+    Node *current = parent;
 
-    while(0 == 0){
-
-        if(parent->left_child == NULL){
-            return parent;
-        }
-
-        parent = parent->left_child;
-
+    //find the leftmost leaf
+    while (current && current->left_child != NULL){
+        current = current->left_child;
     }
-
-    return parent;
+    
+    return current;
 }
 
-void deleteNode(Node *parent, int val){
+Node *deleteNode(Node *root, int val){
 
-    bool deleted = false;
+    //if the tree is empty
+    if (root == NULL) return root;
 
-    while(deleted == false){
+    // Find the node to be deleted
+    if (val < root->value){
 
-        if(val < parent->value){
+        root->left_child = deleteNode(root->left_child, val);
 
-            if(parent->left_child == NULL){
-                printf("The tree has no such value like %d!\n", val);
-                return;
-            }else{
-                parent = parent->left_child;
-            }
+    }else if(val > root->value){
 
+        root->right_child = deleteNode(root->right_child, val);
 
-        }else if(val > parent->value){
+    }else{
 
-            if(parent->right_child == NULL){
-                printf("The tree has no such value like %d!\n", val);
-                return;
-            }else{
-                parent = parent->right_child;
-            }
+        //only one child or no child
+        if (root->left_child == NULL){
+            Node *temp = root->right_child;
+            free(root);
+        return temp;
 
-        }else if(val == parent->value){
-            
-            if(parent->left_child == NULL && parent->right_child == NULL){
-                
-                parent = NULL;
-                deleted = true;
-                
-            }else if(parent->left_child != NULL && parent->right_child == NULL){
-                
-                parent->value = parent->left_child->value;
-                parent->left_child = NULL;
-                deleted = true;
-                
-            }else if(parent->left_child == NULL && parent->right_child != NULL){
-                
-                parent->value = parent->right_child->value;
-                parent->right_child = NULL;
-                deleted = true;
-                
-            }else if(parent->left_child != NULL && parent->right_child != NULL){
-                
-                Node *successor = createNode(0);
-                successor = minValue(parent->right_child);
-                printf("%d", successor->value);
-                parent->value = successor->value;
-                deleteNode(parent->right_child, successor->value);
-                successor = NULL;
-                deleted = true;
-                
-            }
+        }else if(root->right_child == NULL){
+
+            Node *temp = root->left_child;
+            free(root);
+            return temp;
 
         }
 
-    }
+        //if the node has two children
+        Node *temp = minValueNode(root->right_child);
 
-    printf("Value %d was successfully deleted!\n", val);
+        //place the inorder successor in position of the node to be deleted
+        root->value = temp->value;
 
+        //delete the inorder successor
+        root->right_child = deleteNode(root->right_child, temp->value);
+
+  }
+
+    return root;
 }
 
 void padding(char ch, int n){
@@ -186,13 +163,17 @@ void padding(char ch, int n){
 void printTree(Node *root, int level){
   
   if(root == NULL){
+
     padding('\t', level);
     puts ("~");
+
   }else{
+
     printTree(root->right_child, level + 1);
     padding('\t', level);
     printf("%d\n", root->value);
     printTree(root->left_child, level + 1);
+
   }
 
 }
@@ -208,14 +189,9 @@ int main(){
     addNode(root1, 9);
     addNode(root1, 8);
     addNode(root1, 12);
-    addNode(root1, 20);
     addNode(root1, 22);
-    addNode(root1, 2);
-    addNode(root1, 100);
+    addNode(root1, 20);
     addNode(root1, 4);
-    addNode(root1, 17);
-    addNode(root1, 16);
-    addNode(root1, 13);
 
     searchNode(root1, 3);
     searchNode(root1, 10);
@@ -242,13 +218,24 @@ int main(){
 
     printTree(root1, 1);
 
-    deleteNode(root1, 9);
-    deleteNode(root1, 1);
-    deleteNode(root1, 10);
+    root1 = deleteNode(root1, 9);
+    root1 = deleteNode(root1, 1);
+    root1 = deleteNode(root1, 10);
+    root1 = deleteNode(root1, 9);
+    root1 = deleteNode(root1, 4);
+    //root1 = deleteNode(root1, 22);
 
     printf("---------------------\n\n\n\n");
 
     printTree(root1, 1);
+
+    searchNode(root1, 3);
+    searchNode(root1, 10);
+    searchNode(root1, 5);
+    searchNode(root1, 9);
+    searchNode(root1, 1);
+    searchNode(root1, 7);
+    searchNode(root1, 12);
 
     return 0;
 }
