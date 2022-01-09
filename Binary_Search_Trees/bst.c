@@ -171,7 +171,7 @@ void printTree(Node *root, int level){
 
     printTree(root->right_child, level + 1);
     padding('\t', level);
-    printf("%d\n", root->value);
+    printf("%d (%d)\n", root->value, root->repetition);
     printTree(root->left_child, level + 1);
 
   }
