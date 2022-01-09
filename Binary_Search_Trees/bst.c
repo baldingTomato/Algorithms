@@ -126,26 +126,47 @@ Node *deleteNode(Node *root, int val){
 
         //only one child or no child
         if (root->left_child == NULL){
-            Node *temp = root->right_child;
-            free(root);
-        return temp;
+
+            if(root->repetition == 0){
+                Node *temp = root->right_child;
+                free(root);
+                return temp;
+            }else{
+                root->repetition--;
+                return root;
+            }
+            
 
         }else if(root->right_child == NULL){
 
-            Node *temp = root->left_child;
-            free(root);
-            return temp;
+            if(root->repetition == 0){
+                Node *temp = root->left_child;
+                free(root);
+                return temp;
+            }else{
+                root->repetition--;
+                return root;
+            }
+            
 
         }
 
-        //if the node has two children
-        Node *temp = minValueNode(root->right_child);
+        if(root->repetition == 0){
 
-        //place the inorder successor in position of the node to be deleted
-        root->value = temp->value;
+            //if the node has two children
+            Node *temp = minValueNode(root->right_child);
 
-        //delete the inorder successor
-        root->right_child = deleteNode(root->right_child, temp->value);
+            //place the inorder successor in position of the node to be deleted
+            root->value = temp->value;
+
+            //delete the inorder successor
+            root->right_child = deleteNode(root->right_child, temp->value);
+
+        }else{
+                root->repetition--;
+                return root;
+            }
+        
 
   }
 
@@ -184,6 +205,9 @@ int main(){
 
     addNode(root1, 3);
     addNode(root1, 5);
+    addNode(root1, 5);
+    addNode(root1, 5);
+    addNode(root1, 7);
     addNode(root1, 10);
     addNode(root1, 1);
     addNode(root1, 9);
@@ -222,7 +246,8 @@ int main(){
     root1 = deleteNode(root1, 1);
     root1 = deleteNode(root1, 10);
     root1 = deleteNode(root1, 9);
-    root1 = deleteNode(root1, 4);
+    //root1 = deleteNode(root1, 4);
+    root1 = deleteNode(root1, 5);
     //root1 = deleteNode(root1, 22);
 
     printf("---------------------\n\n\n\n");
